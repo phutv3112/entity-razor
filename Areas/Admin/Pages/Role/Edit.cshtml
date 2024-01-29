@@ -17,9 +17,23 @@
 
             <div class="form-group mt-2 ">
                 <input type="submit" value="Update" class="btn btn-primary" />
-                <a asp-page="./Index" class="btn btn-secondary">List Roles</a>
+                <a asp-page="./Index" class="btn btn-secondary">Edit Roles</a>
             </div>
         </form>
+        <hr>
+        <p>List Claims</p>
+        <a asp-page="./AddRoleClaim" asp-route-roleid="@Model.role.Id">+Add Claim</a>
+        @if (Model.Claims.Count > 0)
+        {
+            <ul>
+                @foreach (var claim in Model.Claims)
+                {
+                    <li>
+                        <a asp-page="./EditRoleClaim" asp-route-claimid="@claim.Id">@claim.ClaimType : @claim.ClaimValue</a>
+                    </li>
+                }
+            </ul>
+        }
     </div>
 </div>
 

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using razorweb.models;
 
@@ -19,15 +20,18 @@ namespace App.Admin.USer
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly BlogContext _context;
 
         public AddRoleModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            BlogContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         /// <summary>
@@ -48,6 +52,9 @@ namespace App.Admin.USer
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public SelectList allRoles { set; get; }
+        public List<IdentityRoleClaim<string>> claimInRole { set; get; }
+        public List<IdentityUserClaim<string>> claimInUserClaim { set; get; }
+        public AppUser user { set; get; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -56,7 +63,7 @@ namespace App.Admin.USer
                 return NotFound($"Unable to load user.");
             }
 
-            var user = await _userManager.FindByIdAsync(id);
+            user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -66,7 +73,24 @@ namespace App.Admin.USer
             List<string> rolesName = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
             allRoles = new SelectList(rolesName);
 
+            await GetClaims(id);
+
             return Page();
+        }
+        async Task GetClaims(string id)
+        {
+            var listRoles = from r in _context.Roles
+                            join ur in _context.UserRoles on r.Id equals ur.RoleId
+                            where ur.UserId == id
+                            select r;
+            var _claimRoles = from rc in _context.RoleClaims
+                              join r in listRoles on rc.RoleId equals r.Id
+                              select rc;
+
+            claimInRole = await _claimRoles.ToListAsync();
+            claimInUserClaim = await (from c in _context.UserClaims
+                                      where c.UserId == id
+                                      select c).ToListAsync();
         }
 
         public async Task<IActionResult> OnPostAsync(string id)
@@ -76,12 +100,14 @@ namespace App.Admin.USer
                 return NotFound($"Unable to load user.");
             }
 
-            var user = await _userManager.FindByIdAsync(id);
+            user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
                 return NotFound($"Unable to load user.");
             }
+
+            await GetClaims(id);
 
 
             var OldRoles = (await _userManager.GetRolesAsync(user)).ToArray();

@@ -77,6 +77,17 @@ builder.Services.AddAuthentication()
     options.AppSecret = fbconfig["AppSecret"];
     options.CallbackPath = "/fb-login";
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllowEditRole", policyBuilder =>
+    {
+        policyBuilder.RequireAuthenticatedUser();
+        // policyBuilder.RequireRole("Admin");
+        // policyBuilder.RequireRole("Editor");
+        policyBuilder.RequireClaim("allow.del", "user", "admin");
+    });
+});
+
 
 var app = builder.Build();
 
