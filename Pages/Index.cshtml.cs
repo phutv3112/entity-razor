@@ -11,7 +11,7 @@ public class IndexModel : PageModel
 
     public IndexModel(ILogger<IndexModel> logger, BlogContext blogContext)
     {
-        _logger = logger;
+        // _logger = logger;
         _blogContext = blogContext;
     }
 

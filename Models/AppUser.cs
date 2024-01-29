@@ -7,9 +7,14 @@ namespace razorweb.models
 {
     public class AppUser : IdentityUser
     {
+        public AppUser()
+        {
+        }
+
         [Column(TypeName = "nvarchar")]
         [StringLength(255)]
-        [AllowNull]
         public string? HomeAddress { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? DateOfBirth { get; set; }
     }
 }
