@@ -11,7 +11,7 @@ using razorweb.models;
 
 namespace EntityFrame.Migrations
 {
-    [DbContext(typeof(BlogContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20240125165103_initdb")]
     partial class initdb
     {

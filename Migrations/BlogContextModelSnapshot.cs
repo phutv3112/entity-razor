@@ -10,7 +10,7 @@ using razorweb.models;
 
 namespace EntityFrame.Migrations
 {
-    [DbContext(typeof(BlogContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class BlogContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

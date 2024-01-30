@@ -12,7 +12,7 @@ namespace App.Admin.Role
 {
     public class AddRoleClaimModel : RolePageModel
     {
-        public AddRoleClaimModel(RoleManager<IdentityRole> roleManager, BlogContext context) : base(roleManager, context)
+        public AddRoleClaimModel(RoleManager<IdentityRole> roleManager, AppDbContext context) : base(roleManager, context)
         {
         }
         public class InputModel

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,11 +13,13 @@ namespace EntityFrame.Pages_Blog
 {
     public class EditModel : PageModel
     {
-        private readonly razorweb.models.BlogContext _context;
+        private readonly razorweb.models.AppDbContext _context;
+        private readonly IAuthorizationService _authorizationService;
 
-        public EditModel(razorweb.models.BlogContext context)
+        public EditModel(razorweb.models.AppDbContext context, IAuthorizationService authorizationService)
         {
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         [BindProperty]
@@ -29,7 +32,7 @@ namespace EntityFrame.Pages_Blog
                 return NotFound();
             }
 
-            var article =  await _context.articles.FirstOrDefaultAsync(m => m.Id == id);
+            var article = await _context.articles.FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
                 return NotFound();
@@ -51,7 +54,16 @@ namespace EntityFrame.Pages_Blog
 
             try
             {
-                await _context.SaveChangesAsync();
+                var result = await _authorizationService.AuthorizeAsync(this.User, Article, "CanUpdateArticle");
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    return Content("Cannot update article!");
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

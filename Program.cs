@@ -1,4 +1,6 @@
 using System.Configuration;
+using App.Security.Requirements;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 var connectionString = builder.Configuration.GetValue<string>("ConnectString:BlogContext");
-builder.Services.AddDbContext<BlogContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     // string connectString = builder.Configuration.GetConnectionString("ConnectString:BlogContext");
     Console.WriteLine("Connecting to " + connectionString);
@@ -19,7 +21,7 @@ builder.Services.AddDbContext<BlogContext>(options =>
 });
 // subscribe Identity
 builder.Services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<BlogContext>()
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 // builder.Services.AddDefaultIdentity<AppUser>()
 //                 .AddEntityFrameworkStores<BlogContext>()
@@ -86,7 +88,21 @@ builder.Services.AddAuthorization(options =>
         // policyBuilder.RequireRole("Editor");
         policyBuilder.RequireClaim("allow.del", "user", "admin");
     });
+    options.AddPolicy("InGenZ", policyBuilder =>
+    {
+        policyBuilder.RequireAuthenticatedUser();
+        policyBuilder.Requirements.Add(new GenZRequirement());
+    });
+    options.AddPolicy("ShowAdminMenu", pb =>
+    {
+        pb.RequireRole("Admin");
+    });
+    options.AddPolicy("CanUpdateArticle", pb =>
+    {
+        pb.Requirements.Add(new ArticleRequirement());
+    });
 });
+builder.Services.AddTransient<IAuthorizationHandler, AppAuthorizationHandler>();
 
 
 var app = builder.Build();

@@ -9,7 +9,7 @@ namespace App.Admin.Role
 {
     public class CreateModel : RolePageModel
     {
-        public CreateModel(RoleManager<IdentityRole> roleManager, BlogContext context) : base(roleManager, context)
+        public CreateModel(RoleManager<IdentityRole> roleManager, AppDbContext context) : base(roleManager, context)
         {
         }
         public class InputModel

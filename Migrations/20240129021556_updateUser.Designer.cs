@@ -11,7 +11,7 @@ using razorweb.models;
 
 namespace EntityFrame.Migrations
 {
-    [DbContext(typeof(BlogContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20240129021556_updateUser")]
     partial class updateUser
     {

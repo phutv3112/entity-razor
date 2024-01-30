@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace razorweb.models
 {
-    public class BlogContext : IdentityDbContext<AppUser>
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Article> articles { set; get; } //==> table name
-        public BlogContext(DbContextOptions<BlogContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

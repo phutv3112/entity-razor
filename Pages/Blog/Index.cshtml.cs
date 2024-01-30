@@ -13,9 +13,9 @@ namespace EntityFrame.Pages_Blog
     [Authorize]
     public class IndexModel : PageModel
     {
-        private readonly razorweb.models.BlogContext _context;
+        private readonly razorweb.models.AppDbContext _context;
 
-        public IndexModel(razorweb.models.BlogContext context)
+        public IndexModel(razorweb.models.AppDbContext context)
         {
             _context = context;
         }

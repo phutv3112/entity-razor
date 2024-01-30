@@ -11,9 +11,9 @@ namespace EntityFrame.Pages_Blog
 {
     public class DeleteModel : PageModel
     {
-        private readonly razorweb.models.BlogContext _context;
+        private readonly razorweb.models.AppDbContext _context;
 
-        public DeleteModel(razorweb.models.BlogContext context)
+        public DeleteModel(razorweb.models.AppDbContext context)
         {
             _context = context;
         }

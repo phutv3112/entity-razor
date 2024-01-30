@@ -10,7 +10,7 @@ namespace App.Admin.Role
 {
     public class DeleteModel : RolePageModel
     {
-        public DeleteModel(RoleManager<IdentityRole> roleManager, BlogContext context) : base(roleManager, context)
+        public DeleteModel(RoleManager<IdentityRole> roleManager, AppDbContext context) : base(roleManager, context)
         {
         }
 

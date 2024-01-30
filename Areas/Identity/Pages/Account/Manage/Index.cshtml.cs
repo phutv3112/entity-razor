@@ -68,7 +68,6 @@ namespace EntityFrame.Areas.Identity.Pages.Account.Manage
             [DataType(DataType.DateTime)]
             public string DateOfBirth { get; set; }
         }
-
         private async Task LoadAsync(AppUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);

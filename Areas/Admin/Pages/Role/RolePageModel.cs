@@ -8,10 +8,10 @@ namespace App.Admin.Role
     public class RolePageModel : PageModel
     {
         protected readonly RoleManager<IdentityRole> _roleManager;
-        protected readonly BlogContext _context;
+        protected readonly AppDbContext _context;
         [TempData]
         public string StatusMessage { get; set; }
-        public RolePageModel(RoleManager<IdentityRole> roleManager, BlogContext context)
+        public RolePageModel(RoleManager<IdentityRole> roleManager, AppDbContext context)
         {
             _roleManager = roleManager;
             _context = context;

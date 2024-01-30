@@ -7,9 +7,9 @@ namespace EntityFrame.Pages;
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
-    private readonly BlogContext _blogContext;
+    private readonly AppDbContext _blogContext;
 
-    public IndexModel(ILogger<IndexModel> logger, BlogContext blogContext)
+    public IndexModel(ILogger<IndexModel> logger, AppDbContext blogContext)
     {
         // _logger = logger;
         _blogContext = blogContext;

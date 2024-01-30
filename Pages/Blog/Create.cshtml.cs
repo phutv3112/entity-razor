@@ -11,9 +11,9 @@ namespace EntityFrame.Pages_Blog
 {
     public class CreateModel : PageModel
     {
-        private readonly razorweb.models.BlogContext _context;
+        private readonly razorweb.models.AppDbContext _context;
 
-        public CreateModel(razorweb.models.BlogContext context)
+        public CreateModel(razorweb.models.AppDbContext context)
         {
             _context = context;
         }
